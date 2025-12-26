@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise Selector</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .selection-panel {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .selection-group {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .selection-group h2 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .selection-group h2::before {
+            content: '💪';
+            font-size: 1.2em;
+        }
+
+        .selection-group:last-child h2::before {
+            content: '🎯';
+        }
+
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        button {
+            padding: 15px 20px;
+            font-size: 1em;
+            border: 2px solid #dee2e6;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            color: #495057;
+        }
+
+        button:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .results {
+            margin-top: 40px;
+        }
+
+        .results h2 {
+            color: #333;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .equipment-section {
+            margin-bottom: 35px;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+        }
+
+        .equipment-section h3 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 1.4em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .exercise-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .exercise-item {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #dee2e6;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-item:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .exercise-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .exercise-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 1.05em;
+        }
+
+        .video-toggle {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .video-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .video-toggle::before {
+            content: '▶';
+            transition: transform 0.3s ease;
+        }
+
+        .video-toggle.expanded::before {
+            content: '▼';
+        }
+
+        .video-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            margin-top: 0;
+        }
+
+        .video-container.expanded {
+            max-height: 400px;
+            margin-top: 15px;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 8px;
+        }
+
+        .no-selection {
+            text-align: center;
+            padding: 60px 20px;
+            color: #868e96;
+            font-size: 1.2em;
+            background: #f8f9fa;
+            border-radius: 15px;
+            border: 2px dashed #dee2e6;
+        }
+
+        .no-selection::before {
+            content: '👆';
+            display: block;
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .selection-panel {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .exercise-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .video-toggle {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .scroll-to-indicator {
+            text-align: center;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            margin-top: 15px;
+            font-weight: 500;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>💪 Exercise Selector</h1>
+        <p class="subtitle">Choose your target body part and skill level to discover the perfect exercises</p>
+
+        <div class="selection-panel">
+            <div class="selection-group">
+                <h2>Body Part</h2>
+                <div class="button-group">
+                    <button onclick="selectBodyPart('shoulders')">Shoulders</button>
+                    <button onclick="selectBodyPart('biceps')">Biceps</button>
+                    <button onclick="selectBodyPart('triceps')">Triceps</button>
+                    <button onclick="selectBodyPart('thighs')">Thighs</button>
+                    <button onclick="selectBodyPart('upper-back')">Upper Back</button>
+                </div>
+            </div>
+
+            <div class="selection-group">
+                <h2>Skill Level</h2>
+                <div class="button-group">
+                    <button onclick="selectLevel('beginner')">Beginner</button>
+                    <button onclick="selectLevel('intermediate')">Intermediate</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="results" id="results">
+            <div class="no-selection">
+                Select a body part and skill level to see exercises
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedBodyPart = null;
+        let selectedLevel = null;
+
+        const exercises = {
+            shoulders: {
+                beginner: {
+                    barbell: [
+                        { name: 'Overhead Press', video: 'https://www.youtube.com/watch?v=QAQ64hK4Xxs' },
+                        { name: 'Upright Row', video: 'https://www.youtube.com/watch?v=a8x9TlXRi-s' }
+                    ],
+                    dumbbells: [
+                        { name: 'Dumbbell Shoulder Press', video: 'https://www.youtube.com/watch?v=qEwKCR5JCog' },
+                        { name: 'Lateral Raises', video: 'https://www.youtube.com/watch?v=3VcKaXpzqRo' },
+                        { name: 'Front Raises', video: 'https://www.youtube.com/watch?v=ZgQHfUV1FLM' }
+                    ],
+                    cable: [
+                        { name: 'Cable Lateral Raises', video: 'https://www.youtube.com/watch?v=PPrzBWZDOhA' },
+                        { name: 'Face Pulls', video: 'https://www.youtube.com/watch?v=rep-qVOkqgk' }
+                    ],
+                    bodyweight: [
+                        { name: 'Pike Push-ups', video: 'https://www.youtube.com/watch?v=spoSDckbhXs' }
+                    ]
+                },
+                intermediate: {
+                    barbell: [
+                        { name: 'Push Press', video: 'https://www.youtube.com/watch?v=iaBVSJm78ko' },
+                        { name: 'Behind-the-Neck Press', video: 'https://www.youtube.com/watch?v=0YHi5d-RM_o' }
+                    ],
+                    dumbbells: [
+                        { name: 'Arnold Press', video: 'https://www.youtube.com/watch?v=6Z15_WdXmVw' },
+                        { name: 'Rear Delt Flyes', video: 'https://www.youtube.com/watch?v=EA7u4Q_8kfo' }
+                    ],
+                    cable: [
+                        { name: 'Cable Rear Delt Flyes', video: 'https://www.youtube.com/watch?v=KA8oGV5paFM' },
+                        { name: 'Cable Upright Row', video: 'https://www.youtube.com/watch?v=G-bDJs-Jk0g' }
+                    ],
+                    bodyweight: [
+                        { name: 'Handstand Push-ups', video: 'https://www.youtube.com/watch?v=tQhrk6WMcKw' },
+                        { name: 'Wall Walks', video: 'https://www.youtube.com/watch?v=cUWbTHY3Xgg' }
+                    ]
+                }
+            },
+            biceps: {
+                beginner: {
+                    barbell: [
+                        { name: 'Barbell Curl', video: 'https://www.youtube.com/watch?v=kwG2ipFRgfo' },
+                        { name: 'EZ-Bar Curl', video: 'https://www.youtube.com/watch?v=-BtXOmNDxzM' }
+                    ],
+                    dumbbells: [
+                        { name: 'Dumbbell Curl', video: 'https://www.youtube.com/watch?v=ykJmrZ5v0Oo' },
+                        { name: 'Hammer Curl', video: 'https://www.youtube.com/watch?v=TwD-YGVP4Bk' }
+                    ],
+                    cable: [
+                        { name: 'Cable Curl', video: 'https://www.youtube.com/watch?v=w1NF9ZcqnVg' }
+                    ],
+                    bodyweight: [
+                        { name: 'Chin-ups', video: 'https://www.youtube.com/watch?v=brhF0BvBPMg' },
+                        { name: 'Inverted Rows (underhand)', video: 'https://www.youtube.com/watch?v=1YQ59GwBIl0' }
+                    ]
+                },
+                intermediate: {
+                    barbell: [
+                        { name: 'Close-Grip Barbell Curl', video: 'https://www.youtube.com/watch?v=lInJdlHAJqI' },
+                        { name: 'Reverse Curl', video: 'https://www.youtube.com/watch?v=nRgxYX2Ve9w' }
+                    ],
+                    dumbbells: [
+                        { name: 'Concentration Curl', video: 'https://www.youtube.com/watch?v=0AcMBfhb4fI' },
+                        { name: 'Incline Dumbbell Curl', video: 'https://www.youtube.com/watch?v=soxrZlIl35U' },
+                        { name: 'Zottman Curl', video: 'https://www.youtube.com/watch?v=ZrpRbATqCs4' }
+                    ],
+                    cable: [
+                        { name: 'Cable Hammer Curl', video: 'https://www.youtube.com/watch?v=bRZEuDSDtIk' },
+                        { name: 'High Cable Curl', video: 'https://www.youtube.com/watch?v=S-bKgYfLLIE' }
+                    ],
+                    bodyweight: [
+                        { name: 'Weighted Chin-ups', video: 'https://www.youtube.com/watch?v=Yp7sQRSsL-Q' }
+                    ]
+                }
+            },
+            triceps: {
+                beginner: {
+                    barbell: [
+                        { name: 'Close-Grip Bench Press', video: 'https://www.youtube.com/watch?v=nEF0bv2FW94' },
+                        { name: 'Skull Crushers', video: 'https://www.youtube.com/watch?v=d_KZxkY_0cM' }
+                    ],
+                    dumbbells: [
+                        { name: 'Overhead Dumbbell Extension', video: 'https://www.youtube.com/watch?v=-Vyt2QdsR7E' },
+                        { name: 'Dumbbell Kickbacks', video: 'https://www.youtube.com/watch?v=6SS6K3lAwZ8' }
+                    ],
+                    cable: [
+                        { name: 'Tricep Pushdown (straight bar)', video: 'https://www.youtube.com/watch?v=2-LAMcpzODU' },
+                        { name: 'Tricep Pushdown (rope)', video: 'https://www.youtube.com/watch?v=vB5OHsJ3EME' }
+                    ],
+                    bodyweight: [
+                        { name: 'Bench Dips', video: 'https://www.youtube.com/watch?v=0326dy_-CzM' },
+                        { name: 'Close-Grip Push-ups', video: 'https://www.youtube.com/watch?v=EQqgB9CcMXs' }
+                    ]
+                },
+                intermediate: {
+                    barbell: [
+                        { name: 'Overhead Barbell Extension', video: 'https://www.youtube.com/watch?v=TMJct4OaBgo' }
+                    ],
+                    dumbbells: [
+                        { name: 'Lying Dumbbell Extension', video: 'https://www.youtube.com/watch?v=qlGnmwDFkco' },
+                        { name: 'Tate Press', video: 'https://www.youtube.com/watch?v=uepEPO0cLjw' }
+                    ],
+                    cable: [
+                        { name: 'Overhead Cable Extension', video: 'https://www.youtube.com/watch?v=aP3OKCRfBqk' },
+                        { name: 'Single-Arm Cable Pushdown', video: 'https://www.youtube.com/watch?v=0gKa-0fvZYM' }
+                    ],
+                    bodyweight: [
+                        { name: 'Diamond Push-ups', video: 'https://www.youtube.com/watch?v=J0DnG1_S92I' },
+                        { name: 'Parallel Bar Dips', video: 'https://www.youtube.com/watch?v=2z8JmcrW-As' }
+                    ]
+                }
+            },
+            thighs: {
+                beginner: {
+                    barbell: [
+                        { name: 'Back Squat', video: 'https://www.youtube.com/watch?v=ultWZbUMPL8' },
+                        { name: 'Goblet Squat', video: 'https://www.youtube.com/watch?v=MeIiIdhvXT4' },
+                        { name: 'Romanian Deadlift', video: 'https://www.youtube.com/watch?v=XOwnjklXZPc' }
+                    ],
+                    dumbbells: [
+                        { name: 'Dumbbell Squat', video: 'https://www.youtube.com/watch?v=sTQRaKOkL0Y' },
+                        { name: 'Dumbbell Lunges', video: 'https://www.youtube.com/watch?v=D7KaRcUTQeE' },
+                        { name: 'Dumbbell Step-ups', video: 'https://www.youtube.com/watch?v=9ZknEYboBOQ' }
+                    ],
+                    cable: [
+                        { name: 'Cable Pull-Through', video: 'https://www.youtube.com/watch?v=q3JgvKvZPdA' }
+                    ],
+                    bodyweight: [
+                        { name: 'Bodyweight Squats', video: 'https://www.youtube.com/watch?v=aclHkVaku9U' },
+                        { name: 'Lunges', video: 'https://www.youtube.com/watch?v=QOVaHwm-Q6U' },
+                        { name: 'Wall Sit', video: 'https://www.youtube.com/watch?v=y-wV4Venusw' },
+                        { name: 'Glute Bridges', video: 'https://www.youtube.com/watch?v=wPM8icPu6H8' }
+                    ]
+                },
+                intermediate: {
+                    barbell: [
+                        { name: 'Front Squat', video: 'https://www.youtube.com/watch?v=uYumuL_G_V0' },
+                        { name: 'Bulgarian Split Squat', video: 'https://www.youtube.com/watch?v=2C-uNgKwPLE' },
+                        { name: 'Barbell Lunges', video: 'https://www.youtube.com/watch?v=42vPHPqrwQQ' }
+                    ],
+                    dumbbells: [
+                        { name: 'Dumbbell Bulgarian Split Squat', video: 'https://www.youtube.com/watch?v=y-F2rhIZ_Ow' },
+                        { name: 'Dumbbell Romanian Deadlift', video: 'https://www.youtube.com/watch?v=8gKGlREjFyc' },
+                        { name: 'Sumo Squat', video: 'https://www.youtube.com/watch?v=6pBr_kbfGfI' }
+                    ],
+                    cable: [
+                        { name: 'Cable Squat', video: 'https://www.youtube.com/watch?v=1i5UGxZzX3I' }
+                    ],
+                    bodyweight: [
+                        { name: 'Jump Squats', video: 'https://www.youtube.com/watch?v=A-cFYWvaHr0' },
+                        { name: 'Pistol Squats', video: 'https://www.youtube.com/watch?v=qDcniqddTeE' },
+                        { name: 'Single-Leg Deadlift', video: 'https://www.youtube.com/watch?v=dl8_9mfqJIY' }
+                    ]
+                }
+            },
+            'upper-back': {
+                beginner: {
+                    barbell: [
+                        { name: 'Bent-Over Barbell Row', video: 'https://www.youtube.com/watch?v=FWJR5Ve8bnQ' },
+                        { name: 'Deadlift', video: 'https://www.youtube.com/watch?v=op9kVnSso6Q' }
+                    ],
+                    dumbbells: [
+                        { name: 'Single-Arm Dumbbell Row', video: 'https://www.youtube.com/watch?v=pYcpY20QaE8' },
+                        { name: 'Bent-Over Dumbbell Row', video: 'https://www.youtube.com/watch?v=EfhOOJWDA6k' },
+                        { name: 'Dumbbell Shrugs', video: 'https://www.youtube.com/watch?v=cJRVVxmytaM' }
+                    ],
+                    cable: [
+                        { name: 'Seated Cable Row', video: 'https://www.youtube.com/watch?v=GZbfZ033f74' },
+                        { name: 'Lat Pulldown', video: 'https://www.youtube.com/watch?v=CAwf7n6Luuc' },
+                        { name: 'Face Pulls', video: 'https://www.youtube.com/watch?v=rep-qVOkqgk' }
+                    ],
+                    bodyweight: [
+                        { name: 'Pull-ups', video: 'https://www.youtube.com/watch?v=eGo4IYlbE5g' },
+                        { name: 'Inverted Rows', video: 'https://www.youtube.com/watch?v=hXTc1mDnZCw' }
+                    ]
+                },
+                intermediate: {
+                    barbell: [
+                        { name: 'Pendlay Row', video: 'https://www.youtube.com/watch?v=TlY0PGOzZpY' },
+                        { name: 'Yates Row', video: 'https://www.youtube.com/watch?v=fqFYU8V-Q9w' },
+                        { name: 'Seal Row', video: 'https://www.youtube.com/watch?v=HQeJzpaPUOY' }
+                    ],
+                    dumbbells: [
+                        { name: 'Chest-Supported Dumbbell Row', video: 'https://www.youtube.com/watch?v=h_Y6RJKbMB0' },
+                        { name: 'Reverse Flyes', video: 'https://www.youtube.com/watch?v=8JJCWYUDjog' }
+                    ],
+                    cable: [
+                        { name: 'Single-Arm Cable Row', video: 'https://www.youtube.com/watch?v=lP7MsKxsNOU' },
+                        { name: 'Straight-Arm Pulldown', video: 'https://www.youtube.com/watch?v=S-DbAutOdqY' },
+                        { name: 'Cable Shrugs', video: 'https://www.youtube.com/watch?v=3AKeFG_6y74' }
+                    ],
+                    bodyweight: [
+                        { name: 'Weighted Pull-ups', video: 'https://www.youtube.com/watch?v=Yp7sQRSsL-Q' },
+                        { name: 'Scapular Pull-ups', video: 'https://www.youtube.com/watch?v=FAjWZVZcT54' },
+                        { name: 'Superman Holds', video: 'https://www.youtube.com/watch?v=z6PJMT2y8GQ' }
+                    ]
+                }
+            }
+        };
+
+        function selectBodyPart(bodyPart) {
+            selectedBodyPart = bodyPart;
+            
+            // Update button states
+            document.querySelectorAll('.selection-group:first-child button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Scroll to skill level section
+            const skillLevelSection = document.querySelector('.selection-group:last-child');
+            skillLevelSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            
+            // Add visual indicator if no skill level is selected
+            if (!selectedLevel) {
+                if (!document.querySelector('.scroll-to-indicator')) {
+                    const indicator = document.createElement('div');
+                    indicator.className = 'scroll-to-indicator';
+                    indicator.textContent = '👇 Now select your skill level';
+                    skillLevelSection.appendChild(indicator);
+                    
+                    setTimeout(() => {
+                        indicator.style.animation = 'none';
+                    }, 4000);
+                }
+            }
+            
+            updateResults();
+        }
+
+        function selectLevel(level) {
+            selectedLevel = level;
+            
+            // Update button states
+            document.querySelectorAll('.selection-group:last-child button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Remove indicator if it exists
+            const indicator = document.querySelector('.scroll-to-indicator');
+            if (indicator) {
+                indicator.remove();
+            }
+            
+            updateResults();
+        }
+
+        function getYouTubeEmbedUrl(url) {
+            let videoId = '';
+            
+            // Handle different YouTube URL formats
+            if (url.includes('watch?v=')) {
+                // Standard format: https://www.youtube.com/watch?v=VIDEO_ID
+                videoId = url.split('watch?v=')[1].split('&')[0];
+            } else if (url.includes('youtu.be/')) {
+                // Short format: https://youtu.be/VIDEO_ID
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+            } else if (url.includes('/embed/')) {
+                // Already embed format
+                videoId = url.split('/embed/')[1].split('?')[0];
+            }
+            
+            return `https://www.youtube.com/embed/${videoId}`;
+        }
+
+        function toggleVideo(exerciseId) {
+            const container = document.getElementById(`video-${exerciseId}`);
+            const button = document.getElementById(`btn-${exerciseId}`);
+            
+            container.classList.toggle('expanded');
+            button.classList.toggle('expanded');
+            
+            // If expanding, load the iframe
+            if (container.classList.contains('expanded') && !container.querySelector('iframe')) {
+                const iframe = document.createElement('iframe');
+                iframe.src = container.dataset.videoUrl;
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                iframe.allowFullscreen = true;
+                container.querySelector('.video-wrapper').appendChild(iframe);
+            }
+        }
+
+        function updateResults() {
+            const resultsDiv = document.getElementById('results');
+            
+            if (!selectedBodyPart || !selectedLevel) {
+                resultsDiv.innerHTML = '<div class="no-selection">Select a body part and skill level to see exercises</div>';
+                return;
+            }
+
+            const exerciseData = exercises[selectedBodyPart][selectedLevel];
+            let exerciseId = 0;
+            
+            let html = `<h2>Exercises for ${capitalize(selectedBodyPart)} - ${capitalize(selectedLevel)}</h2>`;
+            
+            // Barbell
+            if (exerciseData.barbell && exerciseData.barbell.length > 0) {
+                html += `
+                    <div class="equipment-section">
+                        <h3>🏋️ Barbell</h3>
+                        <div class="exercise-list">
+                            ${exerciseData.barbell.map(ex => {
+                                const id = exerciseId++;
+                                const embedUrl = getYouTubeEmbedUrl(ex.video);
+                                return `
+                                <div class="exercise-item">
+                                    <div class="exercise-header">
+                                        <span class="exercise-name">${ex.name}</span>
+                                        <button class="video-toggle" id="btn-${id}" onclick="toggleVideo(${id})">Watch Video</button>
+                                    </div>
+                                    <div class="video-container" id="video-${id}" data-video-url="${embedUrl}">
+                                        <div class="video-wrapper"></div>
+                                    </div>
+                                </div>
+                            `}).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Dumbbells
+            if (exerciseData.dumbbells && exerciseData.dumbbells.length > 0) {
+                html += `
+                    <div class="equipment-section">
+                        <h3>🔩 Dumbbells</h3>
+                        <div class="exercise-list">
+                            ${exerciseData.dumbbells.map(ex => {
+                                const id = exerciseId++;
+                                const embedUrl = getYouTubeEmbedUrl(ex.video);
+                                return `
+                                <div class="exercise-item">
+                                    <div class="exercise-header">
+                                        <span class="exercise-name">${ex.name}</span>
+                                        <button class="video-toggle" id="btn-${id}" onclick="toggleVideo(${id})">Watch Video</button>
+                                    </div>
+                                    <div class="video-container" id="video-${id}" data-video-url="${embedUrl}">
+                                        <div class="video-wrapper"></div>
+                                    </div>
+                                </div>
+                            `}).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Cable
+            if (exerciseData.cable && exerciseData.cable.length > 0) {
+                html += `
+                    <div class="equipment-section">
+                        <h3>⚙️ Cable Machine</h3>
+                        <div class="exercise-list">
+                            ${exerciseData.cable.map(ex => {
+                                const id = exerciseId++;
+                                const embedUrl = getYouTubeEmbedUrl(ex.video);
+                                return `
+                                <div class="exercise-item">
+                                    <div class="exercise-header">
+                                        <span class="exercise-name">${ex.name}</span>
+                                        <button class="video-toggle" id="btn-${id}" onclick="toggleVideo(${id})">Watch Video</button>
+                                    </div>
+                                    <div class="video-container" id="video-${id}" data-video-url="${embedUrl}">
+                                        <div class="video-wrapper"></div>
+                                    </div>
+                                </div>
+                            `}).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Bodyweight
+            if (exerciseData.bodyweight && exerciseData.bodyweight.length > 0) {
+                html += `
+                    <div class="equipment-section">
+                        <h3>🤸 Bodyweight</h3>
+                        <div class="exercise-list">
+                            ${exerciseData.bodyweight.map(ex => {
+                                const id = exerciseId++;
+                                const embedUrl = getYouTubeEmbedUrl(ex.video);
+                                return `
+                                <div class="exercise-item">
+                                    <div class="exercise-header">
+                                        <span class="exercise-name">${ex.name}</span>
+                                        <button class="video-toggle" id="btn-${id}" onclick="toggleVideo(${id})">Watch Video</button>
+                                    </div>
+                                    <div class="video-container" id="video-${id}" data-video-url="${embedUrl}">
+                                        <div class="video-wrapper"></div>
+                                    </div>
+                                </div>
+                            `}).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            resultsDiv.innerHTML = html;
+        }
+
+        function capitalize(str) {
+            return str.split('-').map(word => 
+                word.charAt(0).toUpperCase() + word.slice(1)
+            ).join(' ');
+        }
+    </script>
+</body>
+</html>
