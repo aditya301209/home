@@ -163,35 +163,6 @@
             font-size: 1.05em;
         }
 
-        .video-toggle {
-            padding: 8px 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9em;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-        }
-
-        .video-toggle:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
-
-        .video-toggle::before {
-            content: '▶';
-            transition: transform 0.3s ease;
-        }
-
-        .video-toggle.expanded::before {
-            content: '▼';
-        }
-
         .video-container {
             max-height: 0;
             overflow: hidden;
@@ -219,6 +190,65 @@
             width: 100%;
             height: 100%;
             border: none;
+            border-radius: 8px;
+        }
+
+        .media-toggle-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .media-toggle-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .media-toggle-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .media-toggle-btn::before {
+            content: '▶';
+            transition: transform 0.3s ease;
+        }
+
+        .media-toggle-btn.expanded::before {
+            content: '▼';
+        }
+
+        .image-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+            margin-top: 0;
+        }
+
+        .image-container.expanded {
+            max-height: 600px;
+            margin-top: 15px;
+        }
+
+        .image-wrapper {
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
             border-radius: 8px;
         }
 
@@ -258,9 +288,14 @@
                 gap: 12px;
             }
 
-            .video-toggle {
+            .media-toggle-group {
                 width: 100%;
+            }
+
+            .media-toggle-btn {
+                flex: 1;
                 justify-content: center;
+                min-width: 120px;
             }
         }
 
@@ -322,26 +357,26 @@
             shoulders: {
                 beginner: {
                     barbell: [
-                        { name: 'Overhead Press', video: 'https://www.youtube.com/watch?v=QAQ64hK4Xxs' },
-                        { name: 'Upright Row', video: 'https://www.youtube.com/watch?v=a8x9TlXRi-s' }
+                        { name: 'Overhead Press', video: 'https://www.youtube.com/watch?v=QAQ64hK4Xxs', image: 'https://i.imgur.com/oveGDGr.png' },
+                        { name: 'Upright Row', video: 'https://www.youtube.com/watch?v=a8x9TlXRi-s', image: 'https://i.imgur.com/5KzT8Qe.png' }
                     ],
                     dumbbells: [
-                        { name: 'Dumbbell Shoulder Press', video: 'https://www.youtube.com/watch?v=qEwKCR5JCog' },
-                        { name: 'Lateral Raises', video: 'https://www.youtube.com/watch?v=3VcKaXpzqRo' },
-                        { name: 'Front Raises', video: 'https://www.youtube.com/watch?v=ZgQHfUV1FLM' }
+                        { name: 'Dumbbell Shoulder Press', video: 'https://www.youtube.com/watch?v=qEwKCR5JCog', image: 'https://i.imgur.com/8YHZKPm.png' },
+                        { name: 'Lateral Raises', video: 'https://www.youtube.com/watch?v=3VcKaXpzqRo', image: 'https://i.imgur.com/zXN2jPG.png' },
+                        { name: 'Front Raises', video: 'https://www.youtube.com/watch?v=ZgQHfUV1FLM', image: 'https://i.imgur.com/nxQ7hFl.png' }
                     ],
                     cable: [
-                        { name: 'Cable Lateral Raises', video: 'https://www.youtube.com/watch?v=PPrzBWZDOhA' },
-                        { name: 'Face Pulls', video: 'https://www.youtube.com/watch?v=rep-qVOkqgk' }
+                        { name: 'Cable Lateral Raises', video: 'https://www.youtube.com/watch?v=PPrzBWZDOhA', image: 'https://i.imgur.com/Mm6cHwu.png' },
+                        { name: 'Face Pulls', video: 'https://www.youtube.com/watch?v=rep-qVOkqgk', image: 'https://i.imgur.com/dGhF5vY.png' }
                     ],
                     bodyweight: [
-                        { name: 'Pike Push-ups', video: 'https://www.youtube.com/watch?v=spoSDckbhXs' }
+                        { name: 'Pike Push-ups', video: 'https://www.youtube.com/watch?v=spoSDckbhXs', image: 'https://i.imgur.com/yKx3TmD.png' }
                     ]
                 },
                 intermediate: {
                     barbell: [
-                        { name: 'Push Press', video: 'https://www.youtube.com/watch?v=iaBVSJm78ko' },
-                        { name: 'Behind-the-Neck Press', video: 'https://www.youtube.com/watch?v=0YHi5d-RM_o' }
+                        { name: 'Push Press', video: 'https://www.youtube.com/watch?v=iaBVSJm78ko', image: 'https://i.imgur.com/LhT9aKj.png' },
+                        { name: 'Behind-the-Neck Press', video: 'https://www.youtube.com/watch?v=0YHi5d-RM_o', image: 'https://i.imgur.com/wFpBx7e.png' }
                     ],
                     dumbbells: [
                         { name: 'Arnold Press', video: 'https://www.youtube.com/watch?v=6Z15_WdXmVw' },
@@ -567,6 +602,119 @@
             updateResults();
         }
 
+        function getExerciseImageUrl(exerciseName) {
+            // Map exercise names to the free-exercise-db GitHub repository images
+            // These are real exercise demonstration images
+            const exerciseImageMap = {
+                // Shoulders
+                'Overhead Press': 'Barbell_Military_Press/0.jpg',
+                'Upright Row': 'Barbell_Upright_Row/0.jpg',
+                'Dumbbell Shoulder Press': 'Dumbbell_Shoulder_Press/0.jpg',
+                'Lateral Raises': 'Dumbbell_Lateral_Raise/0.jpg',
+                'Front Raises': 'Dumbbell_Front_Raise/0.jpg',
+                'Cable Lateral Raises': 'Cable_Lateral_Raise/0.jpg',
+                'Face Pulls': 'Cable_Face_Pull/0.jpg',
+                'Pike Push-ups': 'Pike_Push-up/0.jpg',
+                'Push Press': 'Push_Press/0.jpg',
+                'Behind-the-Neck Press': 'Behind_The_Neck_Press/0.jpg',
+                'Arnold Press': 'Arnold_Dumbbell_Press/0.jpg',
+                'Rear Delt Flyes': 'Dumbbell_Rear_Delt_Row_Head_On_Bench/0.jpg',
+                'Cable Rear Delt Flyes': 'Cable_Rear_Delt_Fly/0.jpg',
+                'Cable Upright Row': 'Cable_Upright_Row/0.jpg',
+                'Handstand Push-ups': 'Handstand_Push-up/0.jpg',
+                'Wall Walks': 'Wall_Walk/0.jpg',
+                
+                // Biceps
+                'Barbell Curl': 'Barbell_Curl/0.jpg',
+                'EZ-Bar Curl': 'EZ-Bar_Curl/0.jpg',
+                'Dumbbell Curl': 'Dumbbell_Curl/0.jpg',
+                'Hammer Curl': 'Dumbbell_Hammer_Curl/0.jpg',
+                'Cable Curl': 'Cable_Curl/0.jpg',
+                'Chin-ups': 'Chin-up/0.jpg',
+                'Inverted Rows (underhand)': 'Inverted_Row/0.jpg',
+                'Close-Grip Barbell Curl': 'Barbell_Close-grip_Curl/0.jpg',
+                'Reverse Curl': 'Barbell_Reverse_Curl/0.jpg',
+                'Concentration Curl': 'Dumbbell_Concentration_Curl/0.jpg',
+                'Incline Dumbbell Curl': 'Dumbbell_Incline_Curl/0.jpg',
+                'Zottman Curl': 'Dumbbell_Zottman_Curl/0.jpg',
+                'Cable Hammer Curl': 'Cable_Hammer_Curl/0.jpg',
+                'High Cable Curl': 'Cable_Curl/0.jpg',
+                'Weighted Chin-ups': 'Chin-up/0.jpg',
+                
+                // Triceps
+                'Close-Grip Bench Press': 'Barbell_Close-grip_Bench_Press/0.jpg',
+                'Skull Crushers': 'Barbell_Lying_Triceps_Extension/0.jpg',
+                'Overhead Dumbbell Extension': 'Dumbbell_Overhead_Triceps_Extension/0.jpg',
+                'Dumbbell Kickbacks': 'Dumbbell_Kickback/0.jpg',
+                'Tricep Pushdown (straight bar)': 'Cable_Pushdown/0.jpg',
+                'Tricep Pushdown (rope)': 'Cable_Rope_Pushdown/0.jpg',
+                'Bench Dips': 'Bench_Dip/0.jpg',
+                'Close-Grip Push-ups': 'Close-grip_Push-up/0.jpg',
+                'Overhead Barbell Extension': 'Barbell_Overhead_Triceps_Extension/0.jpg',
+                'Lying Dumbbell Extension': 'Dumbbell_Lying_Triceps_Extension/0.jpg',
+                'Tate Press': 'Dumbbell_Tate_Press/0.jpg',
+                'Overhead Cable Extension': 'Cable_Overhead_Triceps_Extension/0.jpg',
+                'Single-Arm Cable Pushdown': 'Cable_One_Arm_Tricep_Pushdown/0.jpg',
+                'Diamond Push-ups': 'Diamond_Push-up/0.jpg',
+                'Parallel Bar Dips': 'Dip/0.jpg',
+                
+                // Thighs
+                'Back Squat': 'Barbell_Back_Squat/0.jpg',
+                'Goblet Squat': 'Dumbbell_Goblet_Squat/0.jpg',
+                'Romanian Deadlift': 'Barbell_Romanian_Deadlift/0.jpg',
+                'Dumbbell Squat': 'Dumbbell_Squat/0.jpg',
+                'Dumbbell Lunges': 'Dumbbell_Lunge/0.jpg',
+                'Dumbbell Step-ups': 'Dumbbell_Step-up/0.jpg',
+                'Cable Pull-Through': 'Cable_Pull_Through/0.jpg',
+                'Bodyweight Squats': 'Bodyweight_Squat/0.jpg',
+                'Lunges': 'Bodyweight_Lunge/0.jpg',
+                'Wall Sit': 'Wall_Sit/0.jpg',
+                'Glute Bridges': 'Hip_Thrust/0.jpg',
+                'Front Squat': 'Barbell_Front_Squat/0.jpg',
+                'Bulgarian Split Squat': 'Bulgarian_Split_Squat/0.jpg',
+                'Barbell Lunges': 'Barbell_Lunge/0.jpg',
+                'Dumbbell Bulgarian Split Squat': 'Dumbbell_Bulgarian_Split_Squat/0.jpg',
+                'Dumbbell Romanian Deadlift': 'Dumbbell_Romanian_Deadlift/0.jpg',
+                'Sumo Squat': 'Dumbbell_Sumo_Squat/0.jpg',
+                'Cable Squat': 'Cable_Squat/0.jpg',
+                'Jump Squats': 'Jump_Squat/0.jpg',
+                'Pistol Squats': 'Pistol_Squat/0.jpg',
+                'Single-Leg Deadlift': 'Single-Leg_Deadlift/0.jpg',
+                
+                // Upper Back
+                'Bent-Over Barbell Row': 'Barbell_Bent_Over_Row/0.jpg',
+                'Deadlift': 'Barbell_Deadlift/0.jpg',
+                'Single-Arm Dumbbell Row': 'Dumbbell_One_Arm_Row/0.jpg',
+                'Bent-Over Dumbbell Row': 'Dumbbell_Bent_Over_Row/0.jpg',
+                'Dumbbell Shrugs': 'Dumbbell_Shrug/0.jpg',
+                'Seated Cable Row': 'Cable_Seated_Row/0.jpg',
+                'Lat Pulldown': 'Lat_Pulldown/0.jpg',
+                'Pull-ups': 'Pull-up/0.jpg',
+                'Inverted Rows': 'Inverted_Row/0.jpg',
+                'Pendlay Row': 'Barbell_Pendlay_Row/0.jpg',
+                'Yates Row': 'Barbell_Bent_Over_Row/0.jpg',
+                'Seal Row': 'Barbell_Seal_Row/0.jpg',
+                'Chest-Supported Dumbbell Row': 'Dumbbell_Incline_Row/0.jpg',
+                'Reverse Flyes': 'Dumbbell_Reverse_Fly/0.jpg',
+                'Single-Arm Cable Row': 'Cable_One_Arm_Seated_Row/0.jpg',
+                'Straight-Arm Pulldown': 'Cable_Straight_Arm_Pulldown/0.jpg',
+                'Cable Shrugs': 'Cable_Shrug/0.jpg',
+                'Weighted Pull-ups': 'Pull-up/0.jpg',
+                'Scapular Pull-ups': 'Scapular_Pull-up/0.jpg',
+                'Superman Holds': 'Superman/0.jpg'
+            };
+            
+            const imagePath = exerciseImageMap[exerciseName];
+            if (imagePath) {
+                // Use the GitHub CDN to serve the images
+                return `https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/${imagePath}`;
+            }
+            
+            // Fallback to placeholder if exercise not found
+            const text = exerciseName.replace(/\s+/g, '+');
+            return `https://via.placeholder.com/600x400/667eea/ffffff?text=${text}`;
+        }
+
         function getYouTubeEmbedUrl(url) {
             let videoId = '';
             
@@ -587,7 +735,7 @@
 
         function toggleVideo(exerciseId) {
             const container = document.getElementById(`video-${exerciseId}`);
-            const button = document.getElementById(`btn-${exerciseId}`);
+            const button = document.getElementById(`btn-video-${exerciseId}`);
             
             container.classList.toggle('expanded');
             button.classList.toggle('expanded');
@@ -599,6 +747,23 @@
                 iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
                 iframe.allowFullscreen = true;
                 container.querySelector('.video-wrapper').appendChild(iframe);
+            }
+        }
+
+        function toggleImage(exerciseId) {
+            const container = document.getElementById(`image-${exerciseId}`);
+            const button = document.getElementById(`btn-image-${exerciseId}`);
+            
+            container.classList.toggle('expanded');
+            button.classList.toggle('expanded');
+            
+            // If expanding, load the image
+            if (container.classList.contains('expanded') && !container.querySelector('img')) {
+                const img = document.createElement('img');
+                img.src = container.dataset.imageUrl;
+                img.alt = 'Exercise demonstration';
+                img.loading = 'lazy';
+                container.querySelector('.image-wrapper').appendChild(img);
             }
         }
 
@@ -624,11 +789,18 @@
                             ${exerciseData.barbell.map(ex => {
                                 const id = exerciseId++;
                                 const embedUrl = getYouTubeEmbedUrl(ex.video);
+                                const imageUrl = getExerciseImageUrl(ex.name);
                                 return `
                                 <div class="exercise-item">
                                     <div class="exercise-header">
                                         <span class="exercise-name">${ex.name}</span>
-                                        <button class="video-toggle" id="btn-${id}" onclick="toggleVideo(${id})">Watch Video</button>
+                                        <div class="media-toggle-group">
+                                            <button class="media-toggle-btn" id="btn-image-${id}" onclick="toggleImage(${id})">View Image</button>
+                                            <button class="media-toggle-btn" id="btn-video-${id}" onclick="toggleVideo(${id})">Watch Video</button>
+                                        </div>
+                                    </div>
+                                    <div class="image-container" id="image-${id}" data-image-url="${imageUrl}">
+                                        <div class="image-wrapper"></div>
                                     </div>
                                     <div class="video-container" id="video-${id}" data-video-url="${embedUrl}">
                                         <div class="video-wrapper"></div>
@@ -649,11 +821,18 @@
                             ${exerciseData.dumbbells.map(ex => {
                                 const id = exerciseId++;
                                 const embedUrl = getYouTubeEmbedUrl(ex.video);
+                                const imageUrl = getExerciseImageUrl(ex.name);
                                 return `
                                 <div class="exercise-item">
                                     <div class="exercise-header">
                                         <span class="exercise-name">${ex.name}</span>
-                                        <button class="video-toggle" id="btn-${id}" onclick="toggleVideo(${id})">Watch Video</button>
+                                        <div class="media-toggle-group">
+                                            <button class="media-toggle-btn" id="btn-image-${id}" onclick="toggleImage(${id})">View Image</button>
+                                            <button class="media-toggle-btn" id="btn-video-${id}" onclick="toggleVideo(${id})">Watch Video</button>
+                                        </div>
+                                    </div>
+                                    <div class="image-container" id="image-${id}" data-image-url="${imageUrl}">
+                                        <div class="image-wrapper"></div>
                                     </div>
                                     <div class="video-container" id="video-${id}" data-video-url="${embedUrl}">
                                         <div class="video-wrapper"></div>
@@ -674,11 +853,18 @@
                             ${exerciseData.cable.map(ex => {
                                 const id = exerciseId++;
                                 const embedUrl = getYouTubeEmbedUrl(ex.video);
+                                const imageUrl = getExerciseImageUrl(ex.name);
                                 return `
                                 <div class="exercise-item">
                                     <div class="exercise-header">
                                         <span class="exercise-name">${ex.name}</span>
-                                        <button class="video-toggle" id="btn-${id}" onclick="toggleVideo(${id})">Watch Video</button>
+                                        <div class="media-toggle-group">
+                                            <button class="media-toggle-btn" id="btn-image-${id}" onclick="toggleImage(${id})">View Image</button>
+                                            <button class="media-toggle-btn" id="btn-video-${id}" onclick="toggleVideo(${id})">Watch Video</button>
+                                        </div>
+                                    </div>
+                                    <div class="image-container" id="image-${id}" data-image-url="${imageUrl}">
+                                        <div class="image-wrapper"></div>
                                     </div>
                                     <div class="video-container" id="video-${id}" data-video-url="${embedUrl}">
                                         <div class="video-wrapper"></div>
@@ -699,11 +885,18 @@
                             ${exerciseData.bodyweight.map(ex => {
                                 const id = exerciseId++;
                                 const embedUrl = getYouTubeEmbedUrl(ex.video);
+                                const imageUrl = getExerciseImageUrl(ex.name);
                                 return `
                                 <div class="exercise-item">
                                     <div class="exercise-header">
                                         <span class="exercise-name">${ex.name}</span>
-                                        <button class="video-toggle" id="btn-${id}" onclick="toggleVideo(${id})">Watch Video</button>
+                                        <div class="media-toggle-group">
+                                            <button class="media-toggle-btn" id="btn-image-${id}" onclick="toggleImage(${id})">View Image</button>
+                                            <button class="media-toggle-btn" id="btn-video-${id}" onclick="toggleVideo(${id})">Watch Video</button>
+                                        </div>
+                                    </div>
+                                    <div class="image-container" id="image-${id}" data-image-url="${imageUrl}">
+                                        <div class="image-wrapper"></div>
                                     </div>
                                     <div class="video-container" id="video-${id}" data-video-url="${embedUrl}">
                                         <div class="video-wrapper"></div>
